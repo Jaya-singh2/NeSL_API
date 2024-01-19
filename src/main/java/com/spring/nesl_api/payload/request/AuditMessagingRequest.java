@@ -9,7 +9,7 @@ public class AuditMessagingRequest {
     private String senderName;
     private String clientId;
     private String companyId;
-    private Map<String, String> content;
+    private Map<String, Object> content;
 
     public String getEmail() {
         return email;
@@ -59,11 +59,11 @@ public class AuditMessagingRequest {
         this.companyId = companyId;
     }
 
-    public Map<String, String> getContent() {
+    public Map<String, Object> getContent() {
         return content;
     }
 
-    public void setContent(Map<String, String> content) {
+    public void setContent(Map<String, Object> content) {
         this.content = content;
     }
 }

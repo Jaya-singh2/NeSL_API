@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -57,7 +58,7 @@ public class NeSLController {
 
     @ApiOperation(value = "This API will be used to audit messaging")
     @RequestMapping(value = {"/nesl/audit-messaging"}, method = RequestMethod.POST)
-    public ResponseEntity<?> callAuditMessaging(@RequestBody AuditMessagingRequest auditMessagingRequest) throws Exception {
+    public ResponseEntity<?> callAuditMessaging(@RequestBody Map<String, Object> requestBodyMap) throws Exception {
         try {
             String apiUrl = "https://legalcloudaudit.azurewebsites.net/api/AuditMessaging";
 
@@ -66,15 +67,15 @@ public class NeSLController {
 
             // Create the request body based on the incoming data
             AuditMessagingRequest requestBody = new AuditMessagingRequest();
-            requestBody.setEmail(auditMessagingRequest.getEmail());
-            requestBody.setActionName(auditMessagingRequest.getActionName());
-            requestBody.setControllerName(auditMessagingRequest.getControllerName());
-            requestBody.setSenderName(auditMessagingRequest.getSenderName());
-            requestBody.setClientId(auditMessagingRequest.getClientId());
-            requestBody.setCompanyId(auditMessagingRequest.getCompanyId());
-            requestBody.setContent(auditMessagingRequest.getContent());
+            requestBody.setEmail((String) requestBodyMap.get("email"));
+            requestBody.setActionName((String) requestBodyMap.get("ActionName"));
+            requestBody.setControllerName((String) requestBodyMap.get("ControllerName"));
+            requestBody.setSenderName((String) requestBodyMap.get("SenderName"));
+            requestBody.setClientId((String) requestBodyMap.get("ClientId"));
+            requestBody.setCompanyId((String) requestBodyMap.get("CompanyId"));
+            requestBody.setContent((Map<String, Object>) requestBodyMap.get("Content"));
 
-            HttpEntity<AuditMessagingRequest> requestEntity = new HttpEntity<>(auditMessagingRequest, headers);
+            HttpEntity<AuditMessagingRequest> requestEntity = new HttpEntity<>(requestBody, headers);
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
