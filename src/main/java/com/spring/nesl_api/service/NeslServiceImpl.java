@@ -10,6 +10,13 @@ import java.util.Map;
 
 @Service
 public class NeslServiceImpl implements NeslService {
+    @Override
+    public String getNeslApi(){
+        String apiUrl = "https://stg.nesl.co.in/DDE_IU_Registration_V3/IUREG_API";
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(apiUrl, String.class);
+        return  response;
+    }
 
     @Override
     public ResponseEntity<String> postAuditMessaging(Map<String, Object> requestBodyMap) {

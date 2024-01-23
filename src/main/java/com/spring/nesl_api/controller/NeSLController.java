@@ -22,45 +22,20 @@ public class NeSLController {
     NeslService neslService;
 
     @ApiOperation(value = "Get external nesl api call")
-    @RequestMapping(value = "/nesl-external-api-call", method = RequestMethod.GET)
-    public ResponseEntity<?> callEternalApi() throws Exception {
+    @RequestMapping(value = "/nesl/get-nesl-api", method = RequestMethod.GET)
+    public ResponseEntity<?> getNeslApi() throws Exception {
         try {
-            String apiUrl = "https://stg.nesl.co.in/DDE_IU_Registration_V3/IUREG_API";
-            RestTemplate restTemplate = new RestTemplate();
-            String response = restTemplate.getForObject(apiUrl, String.class);
-            return ResponseEntity.ok(response);
+            //System.out.println("nesl api response"+neslService.getNeslApi() );
+            return ResponseEntity.ok(neslService.getNeslApi());
         }catch (Exception e){
             logger.error(e.getMessage(), e);
             throw e;
         }
     }
 
-
-    @ApiOperation(value = "This API will be used to get loans details")
-    @RequestMapping(value = {"/nesl/get-loans-details"}, method = RequestMethod.POST)
-    public ResponseEntity<?> getLoanDetails(@RequestBody LoanRequest loanRequest) throws Exception {
-        try {
-            String apiUrl = "https://stg.nesl.co.in/DDEEsignLinkAPI/request/retriggeringthelink/loans/";
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBasicAuth("your_username", "your_password");
-            HttpEntity<LoanRequest> requestEntity = new HttpEntity<>(loanRequest, headers);
-            RestTemplate restTemplate = new RestTemplate();
-            return ResponseEntity.ok(restTemplate.exchange(
-                    apiUrl,
-                    HttpMethod.POST,
-                    requestEntity,
-                    String.class
-            ));
-        } catch (Exception e) {
-            // Handle exceptions appropriately
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred: " + e.getMessage());
-        }
-    }
-
     @ApiOperation(value = "This API will be used to audit messaging")
     @RequestMapping(value = {"/nesl/post-audit-messaging"}, method = RequestMethod.POST)
-    public ResponseEntity<?> callAuditMessaging(@RequestBody Map<String, Object> requestBodyMap) throws Exception {
+    public ResponseEntity<?> postAuditMessaging(@RequestBody Map<String, Object> requestBodyMap) throws Exception {
         try {
             ResponseEntity<String> responseEntity = neslService.postAuditMessaging(requestBodyMap);
             return ResponseEntity.ok(responseEntity.getBody());
