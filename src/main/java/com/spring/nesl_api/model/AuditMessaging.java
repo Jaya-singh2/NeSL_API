@@ -17,4 +17,12 @@ public class AuditMessaging {
     private String senderName;
     private String clientId;
     private String companyId;
+    @Embedded
+    private Content content;
+}
+@Embeddable
+@Data
+class Content {
+    private String key1;
+    private String key2;
 }
