@@ -1,7 +1,6 @@
 package com.spring.nesl_api.service;
 
 import com.spring.nesl_api.payload.request.AuditMessagingRequest;
-import com.spring.nesl_api.repository.AuditMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -12,8 +11,6 @@ import java.util.Map;
 @Service
 public class NeslServiceImpl implements NeslService {
 
-    @Autowired
-    AuditMessage auditMessage;
     @Override
     public ResponseEntity<String> postAuditMessaging(Map<String, Object> requestBodyMap) {
         String apiUrl = "https://legalcloudaudit.azurewebsites.net/api/AuditMessaging";
