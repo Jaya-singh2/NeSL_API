@@ -1,13 +1,11 @@
 package com.spring.nesl_api.controller;
 
-import com.spring.nesl_api.payload.request.LoanRequest;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import com.spring.nesl_api.service.NeslService;
 
 import java.util.Map;
