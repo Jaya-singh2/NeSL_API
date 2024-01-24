@@ -1,6 +1,7 @@
 package com.spring.nesl_api.service;
 
 import com.spring.nesl_api.model.AuditMessaging;
+import com.spring.nesl_api.model.Content;
 import com.spring.nesl_api.payload.request.AuditMessagingRequest;
 import com.spring.nesl_api.repository.AuditMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,17 +56,22 @@ public class NeslServiceImpl implements NeslService {
         if(null != requestBody.getCompanyId()){
             auditMessaging.setCompanyId(requestBody.getCompanyId());
         }
-//        if(null != requestBodyMap.get("key1")){
-//            auditMessaging.setKey1((String) requestBodyMap.get("Content"));
-//        }
+        Map<String, Object> contentMap = requestBody.getContent();
+        if (contentMap != null) {
+            Content content = new Content();
+            content.setKey1(getStringFromMap(contentMap, "key1"));
+            content.setKey2(getStringFromMap(contentMap, "key2"));
+            auditMessaging.setContent(content);
+        }
         AuditMessaging auditMessaging1 = auditMessageRepository.save(auditMessaging);
-
         HttpEntity<AuditMessagingRequest> requestEntity = new HttpEntity<>(requestBody, headers);
-
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
-
         return responseEntity;
-
     }
+
+    private String getStringFromMap(Map<String, Object> map, String key) {
+        return map.containsKey(key) ? (String) map.get(key) : null;
+    }
+
 }

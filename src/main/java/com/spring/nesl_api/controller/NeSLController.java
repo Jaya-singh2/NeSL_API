@@ -41,7 +41,7 @@ public class NeSLController {
             return ResponseEntity.ok(responseEntity.getBody());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw e;
+            throw new Exception(e.getMessage());
         }
     }
 

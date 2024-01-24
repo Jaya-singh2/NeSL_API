@@ -20,9 +20,3 @@ public class AuditMessaging {
     @Embedded
     private Content content;
 }
-@Embeddable
-@Data
-class Content {
-    private String key1;
-    private String key2;
-}
