@@ -5,6 +5,7 @@ import com.spring.nesl_api.model.AuditMessaging;
 import com.spring.nesl_api.model.Content;
 import com.spring.nesl_api.repository.AuditMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
