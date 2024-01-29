@@ -1,25 +1,31 @@
 package com.spring.nesl_api.service;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.nesl_api.AppConfig;
 import com.spring.nesl_api.model.AuditMessaging;
 import com.spring.nesl_api.model.Content;
 import com.spring.nesl_api.repository.AuditMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class NeslServiceImpl implements NeslService {
     @Override
-    public String getNeslApi(){
-        String apiUrl = AppConfig.NESL_URL;
+    public ResponseEntity<?>  getNeslApi( Map<String, String> queryParams, Map<String, Object> requestBody){
+        String apiUrl = AppConfig.NESL_URL+ "?" +
+                queryParams.entrySet().stream()
+                        .map(entry -> entry.getKey() + "=" + entry.getValue())
+                        .collect(Collectors.joining("&"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject(apiUrl, String.class);
-        return  response;
+        ResponseEntity<?> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
+        return responseEntity;
     }
 
     @Autowired

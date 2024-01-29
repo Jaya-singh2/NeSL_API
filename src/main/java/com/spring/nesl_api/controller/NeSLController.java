@@ -1,5 +1,4 @@
 package com.spring.nesl_api.controller;
-
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import com.spring.nesl_api.service.NeslService;
-
 import java.util.Map;
 
 @RestController
@@ -20,16 +18,18 @@ public class NeSLController {
     NeslService neslService;
 
     @ApiOperation(value = "Get external nesl api call")
-    @RequestMapping(value = "/nesl/get-nesl-api", method = RequestMethod.GET)
-    public ResponseEntity<?> getNeslApi() throws Exception {
+    @RequestMapping(value = "/nesl/get-nesl-api", method = RequestMethod.POST)
+    public ResponseEntity<?> getNeslApi(
+            @RequestParam Map<String, String> queryParams,
+            @RequestBody Map<String, Object> requestBody) throws Exception {
         try {
-            //System.out.println("nesl api response"+neslService.getNeslApi() );
-            return ResponseEntity.ok(neslService.getNeslApi());
-        }catch (Exception e){
+            return ResponseEntity.ok(neslService.getNeslApi( queryParams, requestBody));
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            throw e;
+            throw new Exception(e.getMessage());
         }
     }
+
 
     @ApiOperation(value = "This API will be used to audit messaging")
     @RequestMapping(value = {"/nesl/post-audit-messaging"}, method = RequestMethod.POST)
