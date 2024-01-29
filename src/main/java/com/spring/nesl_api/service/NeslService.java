@@ -8,5 +8,5 @@ import java.util.Map;
 @Service
 public interface NeslService {
     ResponseEntity<String> postAuditMessaging(Map<String, Object> requestBodyMap);
-    ResponseEntity<?> getNeslApi( Map<String, String> queryParams, Map<String, Object> requestBody);
+    ResponseEntity<?> getNeslApi( Map<String, String> headers, Map<String, Object> requestBody);
 }

@@ -20,10 +20,10 @@ public class NeSLController {
     @ApiOperation(value = "Get external nesl api call")
     @RequestMapping(value = "/nesl/get-nesl-api", method = RequestMethod.POST)
     public ResponseEntity<?> getNeslApi(
-            @RequestParam Map<String, String> queryParams,
+            @RequestHeader Map<String, String> headers,
             @RequestBody Map<String, Object> requestBody) throws Exception {
         try {
-            return ResponseEntity.ok(neslService.getNeslApi( queryParams, requestBody));
+            return ResponseEntity.ok(neslService.getNeslApi( headers, requestBody));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new Exception(e.getMessage());

@@ -1,4 +1,5 @@
 package com.spring.nesl_api.service;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.nesl_api.AppConfig;
 import com.spring.nesl_api.model.AuditMessaging;
@@ -8,21 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class NeslServiceImpl implements NeslService {
     @Override
-    public ResponseEntity<?>  getNeslApi( Map<String, String> queryParams, Map<String, Object> requestBody){
-        String apiUrl = AppConfig.NESL_URL+ "?" +
-                queryParams.entrySet().stream()
-                        .map(entry -> entry.getKey() + "=" + entry.getValue())
-                        .collect(Collectors.joining("&"));
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+    public ResponseEntity<?>  getNeslApi( Map<String, String> headers, Map<String, Object> requestBody){
+        String apiUrl = AppConfig.NESL_URL;
+        HttpHeaders httpHeaders = new HttpHeaders();
+        Set<String> allowedHeaders = new HashSet<>(Arrays.asList(
+                "api-key", "Content-Type", "Authorization", "META_DATA", "clientID", "resp-url"
+        ));
+          for (Map.Entry<String, String> entry : headers.entrySet()) {
+            String headerName = entry.getKey().toLowerCase(); // Convert to lowercase for case-insensitive check
+            if (allowedHeaders.contains(headerName)) {
+                httpHeaders.add(entry.getKey(), entry.getValue());
+            }
+        }
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<?> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
         return responseEntity;
