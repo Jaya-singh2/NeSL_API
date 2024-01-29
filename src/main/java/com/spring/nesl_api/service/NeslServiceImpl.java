@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class NeslServiceImpl implements NeslService {
+    @Autowired
+    FileUtility fileUtility;
 
     @Override
-    public ResponseEntity<?>  getNeslApi(String base64File, Map<String, String> headers, Map<String, Object> requestBody) throws IOException {
+    public ResponseEntity<?>  getNeslApi(MultipartFile file, Map<String, String> headers, Map<String, Object> requestBody) throws IOException {
         String apiUrl = AppConfig.NESL_URL;
         HttpHeaders httpHeaders = new HttpHeaders();
         Set<String> allowedHeaders = new HashSet<>(Arrays.asList(
@@ -36,12 +38,15 @@ public class NeslServiceImpl implements NeslService {
         Map<String, Object> loan = (Map<String, Object>) requestBody.get("loan");
         Map<String, Object> loanDetails = (Map<String, Object>) loan.get("loandtls");
         List<Map<String, Object>> documentDetailsList = (List<Map<String, Object>>) loanDetails.get("documentdtls");
+        String base64File = fileUtility.convertFileToBase64(file);
+        fileUtility.saveFile(file);
 
         // Iterate through the list and update the "docData" field
         for (Map<String, Object> documentDetails : documentDetailsList) {
             documentDetails.put("docData", base64File);
         }
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
+
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<?> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
 

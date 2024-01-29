@@ -1,25 +1,13 @@
 package com.spring.nesl_api;
-
-//import com.google.common.base.Predicates;
-//import com.google.common.collect.Lists;
+import com.google.common.base.Predicates;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.security.core.annotation.AuthenticationPrincipal;
-//import springfox.documentation.builders.PathSelectors;
-//import springfox.documentation.builders.RequestHandlerSelectors;
-//import springfox.documentation.com.spring.nesl_api.service.AuthorizationScope;
-//import springfox.documentation.com.spring.nesl_api.service.SecurityReference;
-//import springfox.documentation.spi.DocumentationType;
-//import springfox.documentation.spi.com.spring.nesl_api.service.contexts.SecurityContext;
-//import springfox.documentation.spring.web.plugins.Docket;
-//import springfox.documentation.swagger2.annotations.EnableSwagger2;
-//import springfox.documentation.com.spring.nesl_api.service.ApiKey;
-
-import java.util.Arrays;
-import java.util.List;
-
-//@EnableSwagger2
+import org.springframework.context.annotation.Bean;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+@EnableSwagger2
 @SpringBootApplication
 public class NeslApiApplication {
 
@@ -27,33 +15,12 @@ public class NeslApiApplication {
 		SpringApplication.run(NeslApiApplication.class, args);
 	}
 
-//	@Bean
-//	public Docket swagger() {
-//		return new Docket(DocumentationType.SWAGGER_2)
-//				.ignoredParameterTypes(AuthenticationPrincipal.class)
-//				.select()
-//				.apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
-//				.paths(PathSelectors.any()).build()
-//				.securitySchemes(Lists.newArrayList(apiKey()))
-//				.securityContexts(Arrays.asList(securityContext()));
-//
-//	}
-//
-//	private ApiKey apiKey() {
-//		return new ApiKey("apiKey", "Authorization", "header");
-//	}
-//
-//	private SecurityContext securityContext() {
-//		return SecurityContext.builder().securityReferences(defaultAuth())
-//				.forPaths(PathSelectors.any()).build();
-//	}
-//
-//	private List<SecurityReference> defaultAuth() {
-//		AuthorizationScope authorizationScope = new AuthorizationScope(
-//				"global", "accessEverything");
-//		AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-//		authorizationScopes[0] = authorizationScope;
-//		return Arrays.asList(new SecurityReference("apiKey",
-//				authorizationScopes));
-//	}
+	@Bean
+	public Docket swagger() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
+				.build();
+
+	}
 }

@@ -1,7 +1,8 @@
 package com.spring.nesl_api.model;
 
-import jakarta.persistence.Embeddable;
 import lombok.Data;
+
+import javax.persistence.Embeddable;
 
 @Embeddable
 @Data

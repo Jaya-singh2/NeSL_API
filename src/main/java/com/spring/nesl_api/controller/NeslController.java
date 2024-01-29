@@ -8,14 +8,13 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import com.spring.nesl_api.service.NeslService;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api")
-public class NeSLController {
-    private static final Logger logger = LoggerFactory.getLogger(NeSLController.class);
+public class NeslController {
+    private static final Logger logger = LoggerFactory.getLogger(NeslController.class);
 
     @Autowired
     NeslService neslService;
@@ -24,14 +23,11 @@ public class NeSLController {
 
     @ApiOperation(value = "Get external nesl api call")
     @RequestMapping(value = "/nesl/get-nesl-api", method = RequestMethod.POST)
-    public ResponseEntity<?> getNeslApi(
-            @RequestParam("file") MultipartFile file,
+    public ResponseEntity<?> getNeslApi(@RequestParam("file") MultipartFile file,
             @RequestHeader Map<String, String> headers,
             @RequestBody Map<String, Object> requestBody) throws Exception {
         try {
-            String base64File = fileUtility.convertFileToBase64(file);
-            fileUtility.saveFile(file);
-            return ResponseEntity.ok(neslService.getNeslApi(base64File,headers, requestBody));
+            return ResponseEntity.ok(neslService.getNeslApi(file,headers, requestBody));
 
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
