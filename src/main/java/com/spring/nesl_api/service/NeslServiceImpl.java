@@ -23,7 +23,7 @@ public class NeslServiceImpl implements NeslService {
         String apiUrl = AppConfig.NESL_URL;
         HttpHeaders httpHeaders = new HttpHeaders();
         Set<String> allowedHeaders = new HashSet<>(Arrays.asList(
-                "api-key", "Content-Type", "Authorization", "META_DATA", "clientID", "resp-url"
+                "api-key", "content-type", "authorization", "meta_data", "clientid", "resp-url"
         ));
           for (Map.Entry<String, String> entry : headers.entrySet()) {
             String headerName = entry.getKey().toLowerCase(); // Convert to lowercase for case-insensitive check
