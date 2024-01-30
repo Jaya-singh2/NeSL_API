@@ -27,11 +27,13 @@ public class NeslController {
             @RequestHeader Map<String, String> headers,
             @RequestBody Map<String, Object> requestBody) throws Exception {
         try {
-            return ResponseEntity.ok(neslService.getNeslApi(file,headers, requestBody));
+            ResponseEntity<?> responseEntity = neslService.getNeslApi(file, headers, requestBody);
+            return ResponseEntity.ok(responseEntity.getBody());
 
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new Exception(e.getMessage());
+            logger.error("Error while processing NESL API request", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal Server Error");
         }
     }
 
