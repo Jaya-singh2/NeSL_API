@@ -10,5 +10,6 @@ import java.util.Map;
 @Service
 public interface NeslService {
     ResponseEntity<String> postAuditMessaging(Map<String, Object> requestBodyMap);
-    ResponseEntity<?> getNeslApi(MultipartFile file,Map<String, String> headers, Map<String, Object> requestBody) throws IOException;
+    //ResponseEntity<?> getNeslApi(MultipartFile file,Map<String, String> headers, Map<String, Object> requestBody) throws IOException;
+    ResponseEntity<?> getNeslApi(MultipartFile file) throws IOException;
 }

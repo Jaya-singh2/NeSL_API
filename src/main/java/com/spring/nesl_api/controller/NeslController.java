@@ -21,13 +21,27 @@ public class NeslController {
     @Autowired
     FileUtility fileUtility;
 
+//    @ApiOperation(value = "Get external nesl api call")
+//    @RequestMapping(value = "/nesl/get-nesl-api", method = RequestMethod.POST)
+//    public ResponseEntity<?> getNeslApi(@RequestParam("file") MultipartFile file,
+//            @RequestHeader Map<String, String> headers,
+//            @RequestBody Map<String, Object> requestBody) throws Exception {
+//        try {
+//            ResponseEntity<?> responseEntity = neslService.getNeslApi(file, headers, requestBody);
+//            return ResponseEntity.ok(responseEntity.getBody());
+//
+//        } catch (Exception e) {
+//            logger.error("Error while processing NESL API request", e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Internal Server Error");
+//        }
+//    }
+
     @ApiOperation(value = "Get external nesl api call")
     @RequestMapping(value = "/nesl/get-nesl-api", method = RequestMethod.POST)
-    public ResponseEntity<?> getNeslApi(@RequestParam("file") MultipartFile file,
-            @RequestHeader Map<String, String> headers,
-            @RequestBody Map<String, Object> requestBody) throws Exception {
+    public ResponseEntity<?> getNeslApi(@RequestParam("file") MultipartFile file) throws Exception {
         try {
-            ResponseEntity<?> responseEntity = neslService.getNeslApi(file, headers, requestBody);
+            ResponseEntity<?> responseEntity = neslService.getNeslApi(file);
             return ResponseEntity.ok(responseEntity.getBody());
 
         } catch (Exception e) {

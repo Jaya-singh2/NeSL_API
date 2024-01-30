@@ -21,36 +21,71 @@ public class NeslServiceImpl implements NeslService {
     @Autowired
     FileUtility fileUtility;
 
+//    @Override
+//    public ResponseEntity<?>  getNeslApi(MultipartFile file, Map<String, String> headers, Map<String, Object> requestBody) throws IOException {
+//        String apiUrl = AppConfig.NESL_URL;
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        Set<String> allowedHeaders = new HashSet<>(Arrays.asList(
+//                "api-key", "authorization", "meta_data", "clientid", "resp-url"
+//        ));
+//          for (Map.Entry<String, String> entry : headers.entrySet()) {
+//            String headerName = entry.getKey().toLowerCase(); // Convert to lowercase for case-insensitive check
+//            if (allowedHeaders.contains(headerName)) {
+//                httpHeaders.add(entry.getKey(), entry.getValue());
+//            }
+//        }
+//        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+//        Map<String, Object> loan = (Map<String, Object>) requestBody.get("loan");
+//        Map<String, Object> loanDetails = (Map<String, Object>) loan.get("loandtls");
+//        List<Map<String, Object>> documentDetailsList = (List<Map<String, Object>>) loanDetails.get("documentdtls");
+//        String base64File = fileUtility.convertFileToBase64(file);
+//        fileUtility.saveFile(file);
+//
+//        // Iterate through the list and update the "docData" field
+//        for (Map<String, Object> documentDetails : documentDetailsList) {
+//            documentDetails.put("docData", base64File);
+//        }
+//        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
+//
+//        RestTemplate restTemplate = new RestTemplate();
+//        ResponseEntity<?> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
+//
+//        return responseEntity;
+//    }
+
     @Override
-    public ResponseEntity<?>  getNeslApi(MultipartFile file, Map<String, String> headers, Map<String, Object> requestBody) throws IOException {
+    public ResponseEntity<?>  getNeslApi(MultipartFile file) throws IOException {
         String apiUrl = AppConfig.NESL_URL;
+
         HttpHeaders httpHeaders = new HttpHeaders();
-        Set<String> allowedHeaders = new HashSet<>(Arrays.asList(
-                "api-key", "authorization", "meta_data", "clientid", "resp-url"
-        ));
-          for (Map.Entry<String, String> entry : headers.entrySet()) {
-            String headerName = entry.getKey().toLowerCase(); // Convert to lowercase for case-insensitive check
-            if (allowedHeaders.contains(headerName)) {
-                httpHeaders.add(entry.getKey(), entry.getValue());
-            }
-        }
+        httpHeaders.add("api-key", "11Ma7sRLPctvRzWIFp2d");
+        httpHeaders.add("Authorization", "Basic VGVzdDEyMzQ6ZVFMVEF6RmM=");
+        httpHeaders.add("META_DATA", "---EncryptedMetaData------------");
+        httpHeaders.add("clientID", "------RegisteredClientID---------------");
+        httpHeaders.add("resp-url", "------Response URL---------------");
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        Map<String, Object> loan = (Map<String, Object>) requestBody.get("loan");
-        Map<String, Object> loanDetails = (Map<String, Object>) loan.get("loandtls");
-        List<Map<String, Object>> documentDetailsList = (List<Map<String, Object>>) loanDetails.get("documentdtls");
+
         String base64File = fileUtility.convertFileToBase64(file);
-        fileUtility.saveFile(file);
+        //fileUtility.saveFile(file);
 
-        // Iterate through the list and update the "docData" field
-        for (Map<String, Object> documentDetails : documentDetailsList) {
-            documentDetails.put("docData", base64File);
-        }
+        Map<String, Object> requestBody = createApiRequest(base64File);
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, httpHeaders);
-
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<?> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
 
         return responseEntity;
+    }
+
+    private static Map<String, Object> createApiRequest(String base64File) {
+        Map<String, Object> apiRequest = new HashMap<>();
+        Map<String, Object> loanDetails = new HashMap<>();
+        Map<String, Object> documentDetails = new HashMap<>();
+        documentDetails.put("docId", 1);
+        documentDetails.put("docData", base64File);
+        loanDetails.put("documentdtls", Arrays.asList(documentDetails));
+        apiRequest.put("loan", loanDetails);
+
+        return apiRequest;
     }
 
     @Autowired
